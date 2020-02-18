@@ -1,0 +1,9 @@
+.gradle/
+.idea/
+build/
+run/
+libs/
+*.iml
+*.xml
+NPCBattleLimiter.iml
+*.jar
