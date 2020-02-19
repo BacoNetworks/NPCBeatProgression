@@ -1,5 +1,6 @@
 package baconetworks.npcbeatprogression.events;
 
+import baconetworks.npcbeatprogression.AITarget.TargetAllNearPlayers;
 import baconetworks.npcbeatprogression.methods.CloneStuff;
 import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
@@ -13,8 +14,6 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
 
 public class BattleStartEvent {
     @SubscribeEvent
@@ -38,7 +37,6 @@ public class BattleStartEvent {
             final NBTTagCompound nbt = trainer.getEntityData();
             if (nbt.getBoolean("MultipleBattleEnable")) {
                 {
-                    Player send = (Player) player;
                     //Set the new trainer
                     final NPCTrainer trainernew = new NPCTrainer(trainer.getEntityWorld());
                     //Get the name
@@ -56,12 +54,14 @@ public class BattleStartEvent {
                     trainernew.winCommands.addAll(trainer.winCommands);
                     //Add Drops
                     trainernew.updateDrops(trainer.getWinnings());
+                    //Add task (FIx)
+                    trainernew.targetTasks.addTask(1, new TargetAllNearPlayers(trainernew, 20, true, true));
                     //Add pokemon to team
                     EntityPlayer finalPlayer = player;
                     trainer.getPokemonStorage().getTeam().forEach(pokemon1 -> trainernew.getPokemonStorage().addToParty(CloneStuff.clonePokemon((EntityPixelmon) PixelmonEntityList.createEntityFromNBT(pokemon1, finalPlayer.getEntityWorld()))));
                     //Defined participant
                     final TrainerParticipant trainerParticipant = new TrainerParticipant(trainernew, trainer.getBattleType().numPokemon);
-                    //We cancel the event and register a new battle with the new npc we
+                    //We cancel the event and register a new battle with the new npc we set
                     event.setCanceled(true);
                     BattleRegistry.registerBattle(new BattleControllerBase(new BattleParticipant[]{PlayerParticipant}, new BattleParticipant[]{trainerParticipant}, trainer.battleRules));
                 }
