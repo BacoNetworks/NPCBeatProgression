@@ -15,8 +15,8 @@ public class TrainerBeatEvent {
         Player player = (Player) event.player;
         if (trainer.getName().contains("[GYM]")) {
             String trainerName = trainer.getName();
-            trainerName = trainerName.replaceAll(" ", "_");
-            if ((!player.hasPermission("npcbeatprogression." + trainerName))) {
+            trainerName = trainerName.replaceAll(" ", "");
+            if (!(player.hasPermission("npcbeatprogression." + trainerName))) {
                 commandManager.process(Sponge.getServer().getConsole(), "lp user " + player.getUniqueId() + " permission set npcbeatprogression." + trainerName + " pixelgen");
             }
         }

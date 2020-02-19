@@ -1,48 +1,91 @@
 package baconetworks.npcbeatprogression.AITarget;
 
-import baconetworks.npcbeatprogression.NPCBeatProgression;
-import com.pixelmonmod.pixelmon.AI.AITarget;
+import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
+import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import com.pixelmonmod.pixelmon.storage.PixelmonStorage;
+import com.pixelmonmod.pixelmon.storage.PlayerStorage;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.AxisAlignedBB;
+import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.List;
+import java.util.Optional;
 
 
-public class TargetAllNearPlayers extends AITarget {
+public class TargetAllNearPlayers extends EntityAIBase {
     EntityLivingBase targetEntity;
+    private final EntityAINearestAttackableTarget.Sorter sorter;
+    EntityCreature trainer;
+    float targetDistance;
 
-    public TargetAllNearPlayers(EntityCreature entity, float par3, boolean par5, boolean par6) {
-        super(entity, par3, par5, par6);
+    public TargetAllNearPlayers(EntityCreature entity, float par3) {
         this.targetDistance = par3;
-        this.taskOwner = entity;
+        this.trainer = entity;
         this.setMutexBits(3);
+        this.sorter = new EntityAINearestAttackableTarget.Sorter(entity);
     }
 
-    @Override
     public boolean shouldExecute() {
-        NPCBeatProgression.LOGGER.info("Test" + "\n");
-        if (!(this.taskOwner instanceof NPCTrainer)) {
-            return false;
+        AxisAlignedBB axis = new AxisAlignedBB(this.trainer.posX - 5, this.trainer.posY - this.targetDistance, this.trainer.posZ - this.targetDistance, this.trainer.posX + this.targetDistance, this.trainer.posY + this.targetDistance, this.trainer.posZ + this.targetDistance);
+        //List<EntityPlayerMP> nearEntities = this.trainer.world.getEntitiesWithinAABB(EntityPlayerMP.class, this.trainer.getEntityBoundingBox().expand(this.targetDistance, 5.0, this.targetDistance));
+        List<Entity> nearEntities = this.trainer.world.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
+        nearEntities.sort(sorter);
+        for (Object o : nearEntities) {
+            this.targetEntity = (EntityLivingBase) o;
         }
-        List<EntityPlayer> nearEntities = this.taskOwner.world.getEntitiesWithinAABB(EntityPlayer.class, this.taskOwner.getCollisionBoundingBox().expand(this.targetDistance, 5.0, this.targetDistance));
-        for (EntityPlayer entity : nearEntities) {
-            if (entity != null) {
-                NPCBeatProgression.LOGGER.info(entity.getName() + "\n");
-                this.targetEntity = entity;
-                return true;
-            }
-            return false;
-        }
-        return false;
+        return !nearEntities.isEmpty();
     }
 
+    public boolean shouldContinueExecuting() {
+        EntityLivingBase livingBase = this.trainer.getAttackTarget();
+        if (livingBase == null) {
+            return false;
+        } else return livingBase.isEntityAlive();
+    }
 
-    @Override
     public void startExecuting() {
-        this.taskOwner.setAttackTarget(this.targetEntity);
         super.startExecuting();
+    }
+
+    public void resetTask() {
+        this.trainer.setAttackTarget(null);
+    }
+
+    public void updateTask() {
+        EntityPlayerMP player = (EntityPlayerMP) this.targetEntity;
+        //Check if the player is already battling or not.
+        if (BattleRegistry.getBattle(player) != null) {
+            return;
+        }
+        Player sponge = (Player) player;
+        NPCTrainer trainer = (NPCTrainer) this.trainer;
+        String trainerName = this.trainer.getName();
+        trainerName = trainerName.replaceAll(" ", "");
+        if (this.trainer.getName().contains("GYM")) {
+            if (!(sponge.hasPermission("npcbeatprogression." + trainerName))) {
+                Optional<PlayerStorage> optstorage = PixelmonStorage.pokeBallManager.getPlayerStorage(player);
+                if (optstorage.isPresent()) {
+                    PlayerParticipant playerPart;
+                    PlayerStorage storage = optstorage.get();
+                    EntityPixelmon firstPokemon = storage.getFirstAblePokemon(player.world);
+                    playerPart = new PlayerParticipant(player, firstPokemon);
+                    TrainerParticipant trainerPart = new TrainerParticipant(trainer, (EntityPlayerMP) this.targetEntity, trainer.getBattleType().numPokemon);
+                    firstPokemon.StartBattle(playerPart, trainerPart);
+                }
+            }
+        }
+    }
+
+    public boolean isInterruptible() {
+        return false;
     }
 }
 

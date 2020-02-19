@@ -13,7 +13,7 @@ public class AggroTrainerEvent {
             if (trainer.getName().contains("[GYM]")) {
                 Player player = (Player) event.player;
                 String trainerName = trainer.getName();
-                trainerName = trainerName.replaceAll(" ", "_");
+                trainerName = trainerName.replaceAll(" ", "");
                 if (player.hasPermission("npcbeatprogression." + trainerName)) {
                     event.setCanceled(true);
                 }
