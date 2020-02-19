@@ -1,6 +1,8 @@
 package baconetworks.npcbeatprogression;
 
+import baconetworks.npcbeatprogression.commands.CommandList;
 import baconetworks.npcbeatprogression.events.AggroTrainerEvent;
+import baconetworks.npcbeatprogression.events.BattleStartEvent;
 import baconetworks.npcbeatprogression.events.TrainerBeatEvent;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
@@ -28,6 +30,7 @@ public class NPCBeatProgression {
     public static final Logger LOGGER = LoggerFactory.getLogger(PLUGIN_NAME);
 
     public static CommandManager commandManager = Sponge.getCommandManager();
+    public static NPCBeatProgression instance;
 
     @Inject
     private Logger logger;
@@ -36,6 +39,9 @@ public class NPCBeatProgression {
     public void onServerStart(GameStartedServerEvent event) {
         Pixelmon.EVENT_BUS.register(new TrainerBeatEvent());
         Pixelmon.EVENT_BUS.register(new AggroTrainerEvent());
+        Pixelmon.EVENT_BUS.register(new BattleStartEvent());
+        instance = this;
+        CommandList.RegisterCommands();
         logger.info("I started just fine. Running on version " + "@VERSION@" + " of NPCBeatProgression");
     }
 }
