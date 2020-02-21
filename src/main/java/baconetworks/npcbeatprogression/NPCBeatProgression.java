@@ -2,10 +2,7 @@ package baconetworks.npcbeatprogression;
 
 import baconetworks.npcbeatprogression.commands.CommandList;
 import baconetworks.npcbeatprogression.config.ConfigLoader;
-import baconetworks.npcbeatprogression.events.AggroTrainerEvent;
-import baconetworks.npcbeatprogression.events.BattleStartEvent;
-import baconetworks.npcbeatprogression.events.InteractEntityEvent;
-import baconetworks.npcbeatprogression.events.TrainerBeatEvent;
+import baconetworks.npcbeatprogression.events.*;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,6 +58,7 @@ public class NPCBeatProgression {
         Pixelmon.EVENT_BUS.register(new AggroTrainerEvent());
         Pixelmon.EVENT_BUS.register(new BattleStartEvent());
         MinecraftForge.EVENT_BUS.register(new InteractEntityEvent());
+        MinecraftForge.EVENT_BUS.register(new PlayerConnectionEvent());
         instance = this;
         CommandList.RegisterCommands();
         logger.info("I started just fine. Running on version " + "@VERSION@" + " of NPCBeatProgression");
