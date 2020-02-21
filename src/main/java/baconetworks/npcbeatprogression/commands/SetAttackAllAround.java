@@ -11,7 +11,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import java.util.Optional;
 
-public class SetMultipleBattle implements CommandExecutor {
+public class SetAttackAllAround implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -23,20 +23,20 @@ public class SetMultipleBattle implements CommandExecutor {
         CommandList.CommandQue.remove(player.getUniqueId());
         Optional<String> SetOrRemove = args.getOne(Text.of("set/unset"));
         if (!(SetOrRemove.isPresent())) {
-            throw new CommandException(Text.of(TextColors.RED, "Usage /nbp mb <set/unset>"));
+            throw new CommandException(Text.of(TextColors.RED, "Usage /nbp att <set/unset>"));
         }
         String SetOrRemoveFin = SetOrRemove.get();
         if (SetOrRemoveFin.equalsIgnoreCase("set")) {
-            player.sendMessage(Text.of(TextColors.GREEN, "Right click an npc to enable multibattle support"));
-            CommandList.CommandQue.put(player.getUniqueId(), "mbSet");
+            player.sendMessage(Text.of(TextColors.GREEN, "Right click an npc to enable the custom ai that battles all nearby players!"));
+            CommandList.CommandQue.put(player.getUniqueId(), "attSet");
             return CommandResult.success();
         }
         if (SetOrRemoveFin.equalsIgnoreCase("unset")) {
-            player.sendMessage(Text.of(TextColors.GREEN, "Right click an npc to disable multibattle support"));
-            CommandList.CommandQue.put(player.getUniqueId(), "mbUnset");
+            player.sendMessage(Text.of(TextColors.GREEN, "Right click an npc to disable the custom ai that battles all nearby players!"));
+            CommandList.CommandQue.put(player.getUniqueId(), "attUnset");
             return CommandResult.success();
         } else {
-            throw new CommandException(Text.of(TextColors.RED, "Usage /nbp mb <set/unset>"));
+            throw new CommandException(Text.of(TextColors.RED, "Usage /nbp att <set/unset>"));
         }
     }
 }

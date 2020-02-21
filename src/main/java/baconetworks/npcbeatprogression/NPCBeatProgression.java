@@ -1,6 +1,7 @@
 package baconetworks.npcbeatprogression;
 
 import baconetworks.npcbeatprogression.commands.CommandList;
+import baconetworks.npcbeatprogression.config.ConfigLoader;
 import baconetworks.npcbeatprogression.events.AggroTrainerEvent;
 import baconetworks.npcbeatprogression.events.BattleStartEvent;
 import baconetworks.npcbeatprogression.events.InteractEntityEvent;
@@ -10,12 +11,17 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import net.minecraftforge.common.MinecraftForge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
+
+import java.io.File;
 
 @Plugin(
         id = "npcbeatprogression",
@@ -34,8 +40,20 @@ public class NPCBeatProgression {
     public static CommandManager commandManager = Sponge.getCommandManager();
     public static NPCBeatProgression instance;
 
+    //Inject the config dir
+    @Inject
+    @ConfigDir(sharedRoot = true)
+    public File defaultConfigDir;
+
+    @Inject
+    private Game game;
+
     @Inject
     private Logger logger;
+
+    public Game getGame() {
+        return this.game;
+    }
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -46,5 +64,13 @@ public class NPCBeatProgression {
         instance = this;
         CommandList.RegisterCommands();
         logger.info("I started just fine. Running on version " + "@VERSION@" + " of NPCBeatProgression");
+    }
+
+    @Listener
+    public void onPreInit(GamePreInitializationEvent event) {
+        File rootDir = new File(defaultConfigDir, "NPCBeatProgression");
+        ConfigLoader.init(rootDir);
+        ConfigLoader.load();
+        ConfigLoader.loadPlayers();
     }
 }

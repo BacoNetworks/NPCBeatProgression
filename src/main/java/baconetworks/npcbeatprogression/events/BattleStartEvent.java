@@ -1,7 +1,7 @@
 package baconetworks.npcbeatprogression.events;
 
 import baconetworks.npcbeatprogression.AITarget.TargetAllNearPlayers;
-import baconetworks.npcbeatprogression.methods.CloneStuff;
+import baconetworks.npcbeatprogression.methods.Functions;
 import com.pixelmonmod.pixelmon.AI.AITargetNearest;
 import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
@@ -38,7 +38,7 @@ public class BattleStartEvent {
         }
         if (trainer != null && player != null) {
             final NBTTagCompound nbt = trainer.getEntityData();
-            if (nbt.getBoolean("MultipleBattleEnable")) {
+            if (nbt.getBoolean("MultipleBattleEnabled")) {
                 {
                     //Get the name
                     String name = trainer.getName();
@@ -79,7 +79,7 @@ public class BattleStartEvent {
                     trainernew.setName(name);
                     //Add pokemon to team
                     EntityPlayer finalPlayer = player;
-                    trainer.getPokemonStorage().getTeam().forEach(pokemon1 -> trainernew.getPokemonStorage().addToParty(CloneStuff.clonePokemon((EntityPixelmon) PixelmonEntityList.createEntityFromNBT(pokemon1, finalPlayer.getEntityWorld()))));
+                    trainer.getPokemonStorage().getTeam().forEach(pokemon1 -> trainernew.getPokemonStorage().addToParty(Functions.clonePokemon((EntityPixelmon) PixelmonEntityList.createEntityFromNBT(pokemon1, finalPlayer.getEntityWorld()))));
                     //Defined participant
                     final TrainerParticipant trainerParticipant = new TrainerParticipant(trainernew, trainer.getBattleType().numPokemon);
                     //We cancel the event and register a new battle with the new npc we set

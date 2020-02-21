@@ -1,5 +1,7 @@
 package baconetworks.npcbeatprogression.AITarget;
 
+import baconetworks.npcbeatprogression.config.ConfigLoader;
+import baconetworks.npcbeatprogression.config.objects.PlayerObject;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
@@ -13,9 +15,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.api.entity.living.player.Player;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +29,8 @@ public class TargetAllNearPlayers extends EntityAIBase {
     private final EntityAINearestAttackableTarget.Sorter sorter;
     EntityCreature trainer;
     float targetDistance;
+    LinkedHashMap<String, PlayerObject> LinkedHashMapGet = ConfigLoader.PlayerObjectGet();
+
 
     public TargetAllNearPlayers(EntityCreature entity, float par3) {
         this.targetDistance = par3;
@@ -69,7 +75,11 @@ public class TargetAllNearPlayers extends EntityAIBase {
         NPCTrainer trainer = (NPCTrainer) this.trainer;
         String trainerName = this.trainer.getName();
         trainerName = trainerName.replaceAll(" ", "");
-        if (this.trainer.getName().contains("GYM")) {
+        final NBTTagCompound nbt = trainer.getEntityData();
+        if (nbt.hasKey("BacoGymNPC")) {
+            String key = nbt.getString("BacoGymNPC");
+            PlayerObject obj = LinkedHashMapGet.get(player.getUniqueID());
+            //Replace this with a check on if the player has beaten the specific npc of that gym
             if (!(sponge.hasPermission("npcbeatprogression." + trainerName))) {
                 Optional<PlayerStorage> optstorage = PixelmonStorage.pokeBallManager.getPlayerStorage(player);
                 if (optstorage.isPresent()) {
