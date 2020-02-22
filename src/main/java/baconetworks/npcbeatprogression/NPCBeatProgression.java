@@ -1,7 +1,7 @@
 package baconetworks.npcbeatprogression;
 
 import baconetworks.npcbeatprogression.commands.CommandList;
-import baconetworks.npcbeatprogression.config.ConfigLoader;
+import baconetworks.npcbeatprogression.config.DataHandler;
 import baconetworks.npcbeatprogression.events.*;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
@@ -15,6 +15,7 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
@@ -61,14 +62,18 @@ public class NPCBeatProgression {
         MinecraftForge.EVENT_BUS.register(new PlayerConnectionEvent());
         instance = this;
         CommandList.RegisterCommands();
+        DataHandler.load();
         logger.info("I started just fine. Running on version " + "@VERSION@" + " of NPCBeatProgression");
     }
 
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
         File rootDir = new File(defaultConfigDir, "NPCBeatProgression");
-        ConfigLoader.init(rootDir);
-        ConfigLoader.load();
-        ConfigLoader.loadPlayers();
+        DataHandler.init(rootDir);
+    }
+
+    @Listener
+    public void onServerStopping(GameStoppingServerEvent event) {
+        DataHandler.save();
     }
 }

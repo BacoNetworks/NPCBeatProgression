@@ -1,6 +1,6 @@
 package baconetworks.npcbeatprogression.AITarget;
 
-import baconetworks.npcbeatprogression.config.ConfigLoader;
+import baconetworks.npcbeatprogression.config.DataHandler;
 import baconetworks.npcbeatprogression.config.objects.PlayerObject;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -29,7 +29,7 @@ public class TargetAllNearPlayers extends EntityAIBase {
     private final EntityAINearestAttackableTarget.Sorter sorter;
     EntityCreature trainer;
     float targetDistance;
-    LinkedHashMap<String, PlayerObject> LinkedHashMapGet = ConfigLoader.PlayerObjectGet();
+    LinkedHashMap<String, PlayerObject> LinkedHashMapGet = DataHandler.GetPlayerObject();
 
 
     public TargetAllNearPlayers(EntityCreature entity, float par3) {
