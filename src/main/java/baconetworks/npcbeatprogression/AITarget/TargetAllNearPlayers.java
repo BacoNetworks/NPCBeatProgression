@@ -40,7 +40,7 @@ public class TargetAllNearPlayers extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        AxisAlignedBB axis = new AxisAlignedBB(this.trainer.posX - 5, this.trainer.posY - this.targetDistance, this.trainer.posZ - this.targetDistance, this.trainer.posX + this.targetDistance, this.trainer.posY + this.targetDistance, this.trainer.posZ + this.targetDistance);
+        AxisAlignedBB axis = new AxisAlignedBB(this.trainer.posX - this.targetDistance, this.trainer.posY - this.targetDistance, this.trainer.posZ - this.targetDistance, this.trainer.posX + this.targetDistance, this.trainer.posY + this.targetDistance, this.trainer.posZ + this.targetDistance);
         //List<EntityPlayerMP> nearEntities = this.trainer.world.getEntitiesWithinAABB(EntityPlayerMP.class, this.trainer.getEntityBoundingBox().expand(this.targetDistance, 5.0, this.targetDistance));
         List<Entity> nearEntities = this.trainer.world.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
         nearEntities.sort(sorter);
