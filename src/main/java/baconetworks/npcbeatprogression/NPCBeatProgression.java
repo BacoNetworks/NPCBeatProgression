@@ -56,6 +56,7 @@ public class NPCBeatProgression {
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         Pixelmon.EVENT_BUS.register(new TrainerBeatEvent());
+        Pixelmon.EVENT_BUS.register(new TrainerLostEvent());
         Pixelmon.EVENT_BUS.register(new AggroTrainerEvent());
         Pixelmon.EVENT_BUS.register(new BattleStartEvent());
         MinecraftForge.EVENT_BUS.register(new InteractEntityEvent());

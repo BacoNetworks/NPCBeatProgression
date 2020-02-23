@@ -1,6 +1,5 @@
 package baconetworks.npcbeatprogression.config;
 
-import baconetworks.npcbeatprogression.NPCBeatProgression;
 import baconetworks.npcbeatprogression.config.objects.PlayerObject;
 import baconetworks.npcbeatprogression.config.serializer.PlayerBeatGymsDeserializer;
 import baconetworks.npcbeatprogression.config.serializer.PlayerBeatGymsSerializer;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 public class DataHandler {
     public static LinkedHashMap<String, PlayerObject> PlayerGyms = new LinkedHashMap<>();
-    public static String[] GymList = {"Test", "Testv2", "Testv3"};
     private static File PlayerBeatenGyms;
     private static Gson gson;
 

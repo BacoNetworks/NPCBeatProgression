@@ -25,9 +25,9 @@ public class NPCBeatProgressionHelp implements CommandExecutor {
             throw new CommandException(Text.of(TextColors.RED, "You need to be a player to run this command"));
         }
 
-        String[] Commands = {"/nbp mb <set/unset>", "/nbp att <set/unset>", "/nbp gym type/remove", "/nbp listnbt"};
+        String[] Commands = {"/nbp mb <set/unset>", "/nbp att <set/unset>", "/nbp gym <type/remove>", "/nbp listnbt"};
         String[] CommandsSuggest = {"/nbp mb set", "/nbp att set", "/nbp gym type", "/nbp listnbt"};
-        String[] Descriptions = {"Set/unset if an npc can battle multiple people at once", "Set/unset if an npc should use the baco ai that attacks all nearby players", "Add a gym type to the npc", "List all custom nbt data of an npc"};
+        String[] Descriptions = {"Set/unset if an npc can battle multiple people at once", "Set/unset if an npc should use the baco ai that attacks all nearby players", "Add a gym type to the npc. Example : EliteFour-NPC1", "List all custom nbt data of an npc"};
         //Some definitions
         List<Text> texts = new ArrayList<>();
         //We defined the builder here

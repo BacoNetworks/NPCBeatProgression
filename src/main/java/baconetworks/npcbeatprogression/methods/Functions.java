@@ -14,9 +14,13 @@ public class Functions {
 
     public static String GetGym(String s) {
         String[] array = {"EliteFour", "Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"};
+        if (!s.contains("-")) {
+            return null;
+        }
+        String contains = s.split("-")[0];
         for (String check : array) {
-            if (s.equalsIgnoreCase(check)) {
-                return check;
+            if (contains.equalsIgnoreCase(check)) {
+                return s;
             }
         }
         return null;

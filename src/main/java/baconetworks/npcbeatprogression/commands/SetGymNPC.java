@@ -34,7 +34,7 @@ public class SetGymNPC implements CommandExecutor {
         } else {
             String TypeRemoveFinalCheck = Functions.GetGym(TypeRemoveFinal);
             if (TypeRemoveFinalCheck != null) {
-                player.sendMessage(Text.of(TextColors.GREEN, "Right click add a gym to it"));
+                player.sendMessage(Text.of(TextColors.GREEN, "Right click an npc to add a gym to it"));
                 CommandList.GymQue.put(player.getUniqueId(), TypeRemoveFinal);
                 return CommandResult.success();
             } else {

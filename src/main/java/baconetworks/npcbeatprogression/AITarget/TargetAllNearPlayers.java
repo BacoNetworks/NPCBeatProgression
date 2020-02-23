@@ -78,7 +78,7 @@ public class TargetAllNearPlayers extends EntityAIBase {
         final NBTTagCompound nbt = trainer.getEntityData();
         if (nbt.hasKey("BacoGymNPC")) {
             String key = nbt.getString("BacoGymNPC");
-            PlayerObject obj = LinkedHashMapGet.get(player.getUniqueID());
+            PlayerObject obj = LinkedHashMapGet.get(player.getUniqueID().toString());
             //Replace this with a check on if the player has beaten the specific npc of that gym
             if (!(sponge.hasPermission("npcbeatprogression." + trainerName))) {
                 Optional<PlayerStorage> optstorage = PixelmonStorage.pokeBallManager.getPlayerStorage(player);

@@ -110,7 +110,7 @@ public class InteractEntityEvent {
                     } else {
                         CommandList.GymQue.remove(player.getUniqueId());
                         nbt.setString("BacoGymNPC", choice);
-                        player.sendMessage(Text.of(TextColors.GREEN, "This trainer is now a gym npc of the " + choice + " gym!"));
+                        player.sendMessage(Text.of(TextColors.GREEN, "This trainer is now a gym npc of " + choice));
                     }
                 }
             }

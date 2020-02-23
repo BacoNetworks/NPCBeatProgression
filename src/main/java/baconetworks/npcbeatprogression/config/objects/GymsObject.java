@@ -74,4 +74,8 @@ public class GymsObject {
     public void setBeatNPCS(int beatNPCS) {
         BeatNPCS = beatNPCS;
     }
+
+    public void increaseBeatNPCS(int num) {
+        this.BeatNPCS += num;
+    }
 }
